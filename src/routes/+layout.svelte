@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+	import Header from '$lib/header/Header.svelte';
+	import '../app.css';
+
+
+ import { onMount } from 'svelte'
   import axios from 'axios'
 
-  let loadAnimals = []
+  let loadAnimals: string|any[] = []
 
   let loadMoreData = 10
 
@@ -17,13 +21,88 @@
     }
   })
 
-  const loadMoreDataHandler = () => {
-    window.location.reload()
-  }
+ 
 </script>
 
+<Header />
+
+<body>
+
+ 
+  {#if loadAnimals.length <= 0}
+    <div class="loader-container">
+      <div class="loader" />
+    </div>
+  {/if}
+
+  <div class="animal-container">
+    {#each loadAnimals as animal}
+      <div class="animal-card glass-effect">
+        <div class="animal-pic">
+          <img src={animal.image_link} alt={animal.name} />
+        </div>
+        <div class="animal-details">
+          <h1 class="animal-list">{animal.name}</h1>
+          <p class="mention">Diet : {animal.diet}</p>
+
+          <p class="about">Location : {animal.geo_range}</p>
+          <p class="about">Animal Type : {animal.animal_type}</p>
+
+          <div class="stats">
+
+            <div class="stat">
+              <span class="stat-value">Length Max</span>
+              <br />
+              <span class="stat-description">{animal.length_max}m</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">Length Min</span>
+              <br />
+              <span class="stat-description">{animal.length_min}m</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {/each}
+  </div>
+</body>
+
+<footer>
+	<p class="footer-text">Developed by <a href="https://dantelentsoe.com">Dante Lentsoe</a></p>
+</footer>
+
 <style>
-  .animal-container {
+	main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		padding: 1rem;
+		width: 100%;
+		max-width: 1024px;
+		margin: 0 auto;
+		box-sizing: border-box;
+	}
+
+	footer {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 40px;
+	}
+
+	footer a {
+		font-weight: bold;
+	}
+
+	@media (min-width: 480px) {
+		footer {
+			padding: 40px 0;
+		}
+	}
+
+	.animal-container {
     align-items: center;
     margin-left: 30%;
   }
@@ -231,58 +310,4 @@
   }
 </style>
 
-<body>
 
-  <nav>
-    <ul>
-      <li>
-        <a href="#">Animal Zoo</a>
-      </li>
-      <li>
-        <a href="https://dantelentsoe.com">Reach Dev</a>
-      </li>
-      <li>
-        <a href="#" on:click={loadMoreDataHandler}>Generate New List</a>
-
-      </li>
-    </ul>
-  </nav>
-
-  {#if loadAnimals.length <= 0}
-    <div class="loader-container">
-      <div class="loader" />
-    </div>
-  {/if}
-
-  <div class="animal-container">
-    {#each loadAnimals as animal}
-      <div class="animal-card glass-effect">
-        <div class="animal-pic">
-          <img src={animal.image_link} alt={animal.name} />
-        </div>
-        <div class="animal-details">
-          <h1 class="animal-list">{animal.name}</h1>
-          <p class="mention">Diet : {animal.diet}</p>
-
-          <p class="about">Location : {animal.geo_range}</p>
-          <p class="about">Animal Type : {animal.animal_type}</p>
-
-          <div class="stats">
-
-            <div class="stat">
-              <span class="stat-value">Length Max</span>
-              <br />
-              <span class="stat-description">{animal.length_max}m</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value">Length Min</span>
-              <br />
-              <span class="stat-description">{animal.length_min}m</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    {/each}
-  </div>
-</body>
